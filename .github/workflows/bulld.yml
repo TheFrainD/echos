@@ -1,0 +1,90 @@
+name: Build
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  build:
+    name: ${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - {
+              name: "Windows MSVC",
+              os: "windows-2022",
+              flags: "-A x64"
+          }
+          - {
+              name: "Linux GCC",
+              os: "ubuntu-latest",
+              flags: "-GNinja"
+          }
+          - {
+              name: "Linux Clang",
+              os: "ubuntu-latest",
+              flags: "-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -GNinja"
+          }
+          - {
+              name: "MacOS",
+              os: "macos-11",
+              flags: "-GNinja"
+          }
+          - {
+              name: "MacOS Xcode",
+              os: "macos-11",
+              flags: "-GXcode"
+          }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update && \
+          sudo apt-get install \
+          cmake ninja-build \
+          libx11-xcb-dev \
+          libxcb-render-util0-dev \
+          libxcb-xkb-dev \
+          libxcb-icccm4-dev \
+          libxcb-image0-dev \
+          libxcb-keysyms1-dev \
+          libxcb-randr0-dev \
+          libxcb-shape0-dev \
+          libxcb-sync-dev \
+          libxcb-xfixes0-dev \
+          libxcb-xinerama0-dev \
+          libxcb-dri3-dev \
+          libxcb-cursor-dev \
+          libgl1-mesa-dev \
+          libxcb-util-dev \
+          libxcb-util0-dev \
+          xorg-dev \
+
+      - name: Install MacOS Dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install cmake ninja python3
+      
+      - name: Install Conan
+        uses: turtlebrowser/get-conan@main
+        with:
+          version: 1.60.1
+
+      - name: Configure CMake
+        shell: bash
+        run: cmake -B build -DCMAKE_BUILD_TYPE="Release" ${{matrix.platform.flags}}
+
+      - name: Build
+        shell: bash
+        run: cmake --build build
