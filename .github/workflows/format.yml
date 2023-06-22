@@ -11,6 +11,8 @@ jobs:
         path:
           - check: 'src'
             exclude: ''
+          - check: 'include'
+            exclude: ''
     steps:
       - uses: actions/checkout@v3
       - name: Run clang-format style check

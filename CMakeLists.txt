@@ -19,7 +19,11 @@ conan_cmake_install(PATH_OR_REFERENCE .
 
 find_package(raylib 4.0 REQUIRED)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+file(GLOB_RECURSE SOURCES src/*.cpp)
+file(GLOB_RECURSE HEADERS include/*.h)
+
+add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
+target_include_directories(${PROJECT_NAME} PRIVATE include)
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (APPLE)
