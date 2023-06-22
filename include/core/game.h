@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <entt/entt.hpp>
 #include <string>
 
 #include "core/window.h"
@@ -14,9 +15,12 @@ public:
 
     void Run() noexcept;
 
+    entt::registry &GetRegistry() noexcept;
+
 private:
     bool is_running_ {false};
     Window window_;
+    entt::registry registry_;
 
     void Start() noexcept;
     void Loop() noexcept;
