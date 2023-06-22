@@ -4,7 +4,7 @@
 
 namespace core {
 
-Game::Game(std::uint32_t width, std::uint32_t height, const std::string& title) : window_ {width, height, title} {}
+Game::Game(std::uint32_t width, std::uint32_t height, const std::string &title) : window_ {width, height, title} {}
 
 Game::~Game() { Shutdown(); }
 
@@ -12,6 +12,8 @@ void Game::Run() noexcept {
     Start();
     Loop();
 }
+
+entt::registry &Game::GetRegistry() noexcept { return registry_; }
 
 void Game::Start() noexcept {
     is_running_ = true;
