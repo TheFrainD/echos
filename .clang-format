@@ -15,6 +15,7 @@ IndentWidth: '4'
 Language: Cpp
 NamespaceIndentation: None
 PointerAlignment: Right
+DerivePointerAlignment: false
 SortIncludes: 'true'
 SortUsingDeclarations: 'true'
 SpaceAfterCStyleCast: 'false'

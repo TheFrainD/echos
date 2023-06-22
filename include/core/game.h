@@ -5,6 +5,7 @@
 #include <string>
 
 #include "core/window.h"
+#include "render/render_system.h"
 
 namespace core {
 
@@ -21,6 +22,7 @@ private:
     bool is_running_ {false};
     Window window_;
     entt::registry registry_;
+    render::RenderSystem render_system_;
 
     void Start() noexcept;
     void Loop() noexcept;
