@@ -4,10 +4,9 @@
 #include <entt/entt.hpp>
 #include <string>
 
-#include "core/resource/cache.h"
+#include "core/resource/cache_manager.h"
 #include "core/window.h"
 #include "render/render_system.h"
-#include "render/texture.h"
 
 namespace core {
 
@@ -19,13 +18,13 @@ public:
     void Run() noexcept;
 
     entt::registry &GetRegistry() noexcept;
-    resource::Cache<render::Texture> &GetTextureCache() noexcept;
+    resource::CacheManager &GetCacheManager() noexcept;
 
 private:
     bool is_running_ {false};
     Window window_;
     entt::registry registry_;
-    resource::Cache<render::Texture> texture_cache_ {};
+    resource::CacheManager cache_manager_;
     render::RenderSystem render_system_;
 
     void Start() noexcept;

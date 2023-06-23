@@ -10,12 +10,12 @@
 using namespace entt::literals;
 
 int main(int argc, char **argv) {
-    auto game      = std::make_unique<core::Game>(800, 600, "Echos");
-    auto &registry = game->GetRegistry();
-    auto &cache    = game->GetTextureCache();
+    auto game           = std::make_unique<core::Game>(800, 600, "Echos");
+    auto &registry      = game->GetRegistry();
+    auto &cache_manager = game->GetCacheManager();
 
-    auto ret     = cache.load("sky_sprite"_hs, "../assets/sprites/sky.png");
-    auto texture = ret.first->second;
+    cache_manager.AddResource<render::Texture>("sky_sprite"_hs, "../assets/sprites/sky.png");
+    auto texture = cache_manager.GetResource<render::Texture>("sky_sprite"_hs);
 
     auto sky = registry.create();
     registry.emplace<physics::components::Transform>(sky, (Vector2) {400.0, 300.0});
