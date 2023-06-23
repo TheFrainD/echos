@@ -8,14 +8,14 @@ include(conan)
 set(CMAKE_CXX_STANDARD 20)
 
 conan_cmake_configure(REQUIRES raylib/4.0.0 entt/3.11.1
-                      GENERATORS cmake_find_package)
+        GENERATORS cmake_find_package)
 
 conan_cmake_autodetect(settings)
 
 conan_cmake_install(PATH_OR_REFERENCE .
-                    BUILD missing
-                    REMOTE conancenter
-                    SETTINGS ${settings})
+        BUILD missing
+        REMOTE conancenter
+        SETTINGS ${settings})
 
 find_package(raylib 4.0 REQUIRED)
 find_package(EnTT 3.11.1 REQUIRED)
@@ -31,4 +31,4 @@ if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework IOKit")
     target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
     target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
-endif()
+endif ()

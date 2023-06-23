@@ -2,10 +2,10 @@
 
 #include <raymath.h>
 
-namespace ecs::components {
+namespace physics::components {
 
 struct Transform {
     Vector2 position;
 };
 
-}  // namespace ecs::components
+}  // namespace physics::components

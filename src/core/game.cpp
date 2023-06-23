@@ -32,4 +32,6 @@ void Game::Loop() noexcept {
 
 void Game::Shutdown() noexcept { CloseWindow(); }
 
+resource::CacheManager &Game::GetCacheManager() noexcept { return cache_manager_; }
+
 }  // namespace core

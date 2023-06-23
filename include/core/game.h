@@ -4,6 +4,7 @@
 #include <entt/entt.hpp>
 #include <string>
 
+#include "core/resource/cache_manager.h"
 #include "core/window.h"
 #include "render/render_system.h"
 
@@ -17,11 +18,13 @@ public:
     void Run() noexcept;
 
     entt::registry &GetRegistry() noexcept;
+    resource::CacheManager &GetCacheManager() noexcept;
 
 private:
     bool is_running_ {false};
     Window window_;
     entt::registry registry_;
+    resource::CacheManager cache_manager_;
     render::RenderSystem render_system_;
 
     void Start() noexcept;
