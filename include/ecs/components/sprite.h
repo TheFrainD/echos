@@ -1,14 +1,13 @@
 #pragma once
 
-#include <raylib.h>
+#include <entt/resource/resource.hpp>
 
-#include <cstdint>
-#include <memory>
+#include "render/texture.h"
 
 namespace ecs::components {
 
 struct Sprite {
-    std::shared_ptr<Texture2D> texture;
+    entt::resource<render::Texture> texture;
 };
 
 }  // namespace ecs::components

@@ -1,23 +1,28 @@
 #include <raylib.h>
 
+#include <entt/entt.hpp>
 #include <memory>
 
 #include "core/game.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
+#include "render/texture.h"
+
+using namespace entt::literals;
 
 int main(int argc, char **argv) {
-    auto game       = std::make_unique<core::Game>(800, 600, "Echos");
-    auto &registery = game->GetRegistry();
+    auto game      = std::make_unique<core::Game>(800, 600, "Echos");
+    auto &registry = game->GetRegistry();
+    auto &cache    = game->GetTextureCache();
 
-    auto texture = std::make_shared<Texture2D>(LoadTexture("../images/parallax-mountain-bg.png"));
+    auto ret     = cache.load("sky_sprite"_hs, "../assets/sprites/sky.png");
+    auto texture = ret.first->second;
 
-    auto sky = registery.create();
-    registery.emplace<ecs::components::Transform>(sky, (Vector2) {400.0, 300.0});
-    registery.emplace<ecs::components::Sprite>(sky, texture);
+    auto sky = registry.create();
+    registry.emplace<ecs::components::Transform>(sky, (Vector2) {400.0, 300.0});
+    registry.emplace<ecs::components::Sprite>(sky, texture);
 
     game->Run();
 
-    UnloadTexture(*texture);
     return 0;
 }

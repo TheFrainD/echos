@@ -16,7 +16,7 @@ void RenderSystem::Update(entt::registry &registry) noexcept {
     ClearBackground(BLACK);
 
     view.each([](auto &transform, auto &sprite) {
-        DrawTexture(*sprite.texture, transform.position.x, transform.position.y, WHITE);
+        DrawTexture(sprite.texture->Get(), transform.position.x, transform.position.y, WHITE);
     });
 
     EndDrawing();
