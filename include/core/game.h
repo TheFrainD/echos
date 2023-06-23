@@ -19,13 +19,13 @@ public:
     void Run() noexcept;
 
     entt::registry &GetRegistry() noexcept;
-    entt::resource_cache<render::Texture, resource::Loader<render::Texture>> &GetTextureCache() noexcept;
+    resource::Cache<render::Texture> &GetTextureCache() noexcept;
 
 private:
     bool is_running_ {false};
     Window window_;
     entt::registry registry_;
-    entt::resource_cache<render::Texture, resource::Loader<render::Texture>> texture_cache_ {};
+    resource::Cache<render::Texture> texture_cache_ {};
     render::RenderSystem render_system_;
 
     void Start() noexcept;

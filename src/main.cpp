@@ -4,9 +4,8 @@
 #include <memory>
 
 #include "core/game.h"
-#include "ecs/components/sprite.h"
-#include "ecs/components/transform.h"
-#include "render/texture.h"
+#include "physics/components/transform.h"
+#include "render/components/sprite.h"
 
 using namespace entt::literals;
 
@@ -19,8 +18,8 @@ int main(int argc, char **argv) {
     auto texture = ret.first->second;
 
     auto sky = registry.create();
-    registry.emplace<ecs::components::Transform>(sky, (Vector2) {400.0, 300.0});
-    registry.emplace<ecs::components::Sprite>(sky, texture);
+    registry.emplace<physics::components::Transform>(sky, (Vector2) {400.0, 300.0});
+    registry.emplace<render::components::Sprite>(sky, texture);
 
     game->Run();
 
