@@ -32,6 +32,8 @@ void Game::Loop() noexcept {
 
 void Game::Shutdown() noexcept { CloseWindow(); }
 
-entt::resource_cache<render::Texture, resource::Loader<render::Texture>> &Game::GetTextureCache() noexcept { return texture_cache_; }
+entt::resource_cache<render::Texture, resource::Loader<render::Texture>> &Game::GetTextureCache() noexcept {
+    return texture_cache_;
+}
 
 }  // namespace core

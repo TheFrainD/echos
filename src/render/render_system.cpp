@@ -2,15 +2,13 @@
 
 #include <raylib.h>
 
-#include "ecs/components/sprite.h"
-#include "ecs/components/transform.h"
-
-namespace comp = ecs::components;
+#include "physics/components/transform.h"
+#include "render/components/sprite.h"
 
 namespace render {
 
 void RenderSystem::Update(entt::registry &registry) noexcept {
-    auto view = registry.view<comp::Transform, comp::Sprite>();
+    auto view = registry.view<physics::components::Transform, components::Sprite>();
 
     BeginDrawing();
     ClearBackground(BLACK);

@@ -6,7 +6,7 @@ namespace render {
 
 class RenderSystem final : public ecs::System {
 public:
-    void Update(entt::registry &registry) noexcept;
+    void Update(entt::registry &registry) noexcept override;
 };
 
 }  // namespace render
