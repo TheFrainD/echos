@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <entt/entt.hpp>
 #include <string>
 
 #include "core/resource/cache_manager.h"
@@ -9,11 +8,16 @@
 #include "render/render_system.h"
 
 namespace core {
-
 class Game {
 public:
     Game(std::uint32_t width, std::uint32_t height, const std::string &title);
     ~Game();
+
+    Game(const Game &) = delete;
+    Game(Game &&)      = delete;
+
+    Game &operator=(const Game &) = delete;
+    Game &operator=(Game &&)      = delete;
 
     void Run() noexcept;
 
@@ -29,7 +33,6 @@ private:
 
     void Start() noexcept;
     void Loop() noexcept;
-    void Shutdown() noexcept;
+    static void Shutdown() noexcept;
 };
-
 }  // namespace core

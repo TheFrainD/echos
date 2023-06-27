@@ -6,9 +6,8 @@
 #include "render/components/sprite.h"
 
 namespace render {
-
 void RenderSystem::Update(entt::registry &registry) noexcept {
-    auto view = registry.view<physics::components::Transform, components::Sprite>();
+    const auto view = registry.view<physics::components::Transform, components::Sprite>();
 
     BeginDrawing();
     ClearBackground(BLACK);
@@ -19,5 +18,4 @@ void RenderSystem::Update(entt::registry &registry) noexcept {
 
     EndDrawing();
 }
-
 }  // namespace render

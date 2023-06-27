@@ -3,9 +3,9 @@
 #include <raylib.h>
 
 namespace core {
-
-Game::Game(std::uint32_t width, std::uint32_t height, const std::string &title) : window_ {width, height, title} {
-    InitWindow(window_.width, window_.height, window_.title.c_str());
+Game::Game(const std::uint32_t width, const std::uint32_t height, const std::string &title)
+    : window_ {width, height, title} {
+    InitWindow(static_cast<int>(window_.width), static_cast<int>(window_.height), window_.title.c_str());
     SetTargetFPS(60);
 }
 
@@ -33,5 +33,4 @@ void Game::Loop() noexcept {
 void Game::Shutdown() noexcept { CloseWindow(); }
 
 resource::CacheManager &Game::GetCacheManager() noexcept { return cache_manager_; }
-
 }  // namespace core

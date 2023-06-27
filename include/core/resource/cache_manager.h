@@ -3,13 +3,11 @@
 #include <entt/entt.hpp>
 #include <memory>
 #include <typeindex>
-#include <typeinfo>
 #include <unordered_map>
 
 #include "core/resource/cache.h"
 
 namespace core::resource {
-
 class CacheManager {
 public:
     template <typename T>
@@ -35,5 +33,4 @@ public:
 private:
     std::unordered_map<std::type_index, std::shared_ptr<void>> caches_;
 };
-
 }  // namespace core::resource
