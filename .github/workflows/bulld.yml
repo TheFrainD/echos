@@ -74,7 +74,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install cmake ninja python3
+          brew install cmake ninja
       
       - name: Install Conan
         uses: turtlebrowser/get-conan@main
