@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 
+#include "core/player_system.h"
 #include "core/resource/cache_manager.h"
 #include "core/window.h"
 #include "render/render_system.h"
@@ -30,6 +31,7 @@ private:
     entt::registry registry_;
     resource::CacheManager cache_manager_;
     render::RenderSystem render_system_;
+    PlayerSystem player_system_;
 
     void Start() noexcept;
     void Loop() noexcept;

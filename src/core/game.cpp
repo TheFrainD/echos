@@ -22,6 +22,8 @@ void Game::Start() noexcept { is_running_ = true; }
 
 void Game::Loop() noexcept {
     while (is_running_) {
+        player_system_.Update(registry_);
+
         render_system_.Update(registry_);
 
         if (WindowShouldClose()) {
