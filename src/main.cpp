@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     auto &registry {game->GetRegistry()};
     auto &cache_manager {game->GetCacheManager()};
 
-    cache_manager.AddResource<render::Texture>("sky_sprite"_hs, "../assets/sprites/sky.png");
+    cache_manager.AddResource<render::Texture>("sky_sprite"_hs, "assets/sprites/sky.png");
     auto texture {cache_manager.GetResource<render::Texture>("sky_sprite"_hs)};
 
     const auto sky {registry.create()};
