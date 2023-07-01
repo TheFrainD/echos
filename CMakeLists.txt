@@ -13,6 +13,7 @@ conan_cmake_configure(
         glfw/3.3.8
         glad/0.1.36
         glm/0.9.5.4
+        spdlog/1.11.0
         OPTIONS
         glad:gl_profile=core
         glad:gl_version=4.6
@@ -29,6 +30,7 @@ find_package(glfw3 REQUIRED)
 find_package(glad REQUIRED)
 find_package(EnTT REQUIRED)
 find_package(glm REQUIRED)
+find_package(spdlog REQUIRED)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.h)
@@ -36,7 +38,7 @@ file(GLOB_RECURSE HEADERS include/*.h)
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 target_compile_definitions(${PROJECT_NAME} PUBLIC GLFW_INCLUDE_NONE)
-target_link_libraries(${PROJECT_NAME} glfw glad::glad EnTT::EnTT glm::glm)
+target_link_libraries(${PROJECT_NAME} glfw glad::glad EnTT::EnTT glm::glm spdlog::spdlog)
 
 if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework IOKit")

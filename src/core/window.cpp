@@ -2,13 +2,10 @@
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-
-#include <iostream>
+#include <spdlog/spdlog.h>
 
 namespace {
-void GlfwErrorCallback(int error_code, const char *message) {
-    std::cerr << "GLFW Error #" << error_code << ": " << message << '\n';
-}
+void GlfwErrorCallback(int error_code, const char *message) { spdlog::error("GLFW Error #{}: {}", error_code, message); }
 }  // namespace
 
 namespace core {
@@ -22,6 +19,7 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
         if (!glfwInit()) {
             throw std::runtime_error {"Failed to initialize GLFW"};
         }
+        spdlog::info("GLFW initialized");
         glfw_initialized_ = true;
     }
 
@@ -36,6 +34,8 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
         glfwTerminate();
         throw std::runtime_error {"Failed to create window"};
     }
+
+    spdlog::info("Created window");
 
     glfwSetWindowUserPointer(handle_, &data_);
 
@@ -56,6 +56,11 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
     }
 
     glViewport(0, 0, width, height);
+
+    spdlog::debug("Vendor: {}", reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
+    spdlog::debug("Renderer: {}", reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
+    spdlog::debug("OpenGL version: {}", reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+    spdlog::debug("GLSL version: {}", reinterpret_cast<const char *>(glGetString(GL_SHADING_LANGUAGE_VERSION)));
 }
 
 Window::~Window() {
@@ -71,5 +76,5 @@ void Window::PollEvents() noexcept { glfwPollEvents(); }
 
 void Window::SwapBuffers() const noexcept { glfwSwapBuffers(handle_); }
 
-bool Window::ShouldClose() const noexcept { return glfwWindowShouldClose(handle_); }
+bool Window::ShouldClose() const noexcept { return glfwWindowShouldClose(handle_) != 0; }
 }  // namespace core
