@@ -1,7 +1,7 @@
 #include "core/window.h"
 
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 #include <iostream>
 
@@ -17,8 +17,6 @@ bool Window::glfw_initialized_ {false};
 Window::Window(const std::uint32_t width, const std::uint32_t height, const std::string &title)
     : data_ {width, height, title} {
     glfwSetErrorCallback(GlfwErrorCallback);
-
-    glewExperimental = GL_TRUE;
 
     if (!glfw_initialized_) {
         if (!glfwInit()) {
@@ -51,9 +49,10 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
     glfwMakeContextCurrent(handle_);
     glfwSwapInterval(1);
 
-    if (glewInit() != GLEW_OK) {
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+        glfwDestroyWindow(handle_);
         glfwTerminate();
-        throw std::runtime_error {"Failed to initialize GLEW"};
+        throw std::runtime_error {"Failed to initialize glad"};
     }
 
     glViewport(0, 0, width, height);
