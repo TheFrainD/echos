@@ -7,7 +7,12 @@ include(conan)
 
 set(CMAKE_CXX_STANDARD 20)
 
-conan_cmake_configure(REQUIRES raylib/4.0.0 entt/3.11.1
+conan_cmake_configure(
+        REQUIRES
+        entt/3.11.1
+        glfw/3.3.8
+        glew/2.2.0
+        glm/0.9.5.4
         GENERATORS cmake_find_package)
 
 conan_cmake_autodetect(settings)
@@ -17,15 +22,19 @@ conan_cmake_install(PATH_OR_REFERENCE .
         REMOTE conancenter
         SETTINGS ${settings})
 
-find_package(raylib 4.0 REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(glfw3 3.3.8 REQUIRED)
 find_package(EnTT 3.11.1 REQUIRED)
+find_package(GLEW 2.2.0 REQUIRED)
+find_package(glm REQUIRED)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.h)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE include)
-target_link_libraries(${PROJECT_NAME} raylib EnTT::EnTT)
+target_include_directories(${PROJECT_NAME} PRIVATE include ${GLEW_INCLUDE_DIRS})
+target_compile_definitions(${PROJECT_NAME} PUBLIC GLFW_INCLUDE_NONE)
+target_link_libraries(${PROJECT_NAME} glfw ${GLEW_LIBRARIES} EnTT::EnTT glm::glm)
 
 if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework IOKit")
