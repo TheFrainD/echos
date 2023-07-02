@@ -3,12 +3,12 @@
 #include <cstdint>
 #include <stdexcept>
 
-#include "graphics/shader_exception.h"
+#include "graphics/shader_error.h"
 
 namespace graphics {
-class ShaderCompilationException : public ShaderException {
+class ShaderCompilationError : public ShaderError {
 public:
-    explicit ShaderCompilationException(const std::string &arg) : ShaderException {arg} {}
+    explicit ShaderCompilationError(const std::string &arg) : ShaderError {arg} {}
 };
 
 class Shader {

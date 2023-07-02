@@ -25,7 +25,7 @@ Shader &Shader::operator=(Shader &&other) noexcept {
 
 void Shader::SetSource(const std::string &source) const {
     if (id_ == 0) {
-        throw ShaderException {"Cannot set source of an invalid shader"};
+        throw ShaderError {"Cannot set source of an invalid shader"};
     }
 
     const auto *char_source = source.c_str();
@@ -34,7 +34,7 @@ void Shader::SetSource(const std::string &source) const {
 
 void Shader::Compile() const {
     if (id_ == 0) {
-        throw ShaderException {"Cannot compile an invalid shaders="};
+        throw ShaderError {"Cannot compile an invalid shaders="};
     }
 
     glCompileShader(id_);
@@ -42,7 +42,7 @@ void Shader::Compile() const {
     GLint compile_status;
     glGetShaderiv(id_, GL_COMPILE_STATUS, &compile_status);
     if (compile_status == GL_FALSE) {
-        throw ShaderCompilationException {GetInfoLog()};
+        throw ShaderCompilationError {GetInfoLog()};
     }
 }
 
@@ -57,7 +57,7 @@ void Shader::Release() noexcept {
 
 std::string Shader::GetInfoLog() const {
     if (id_ == 0) {
-        throw ShaderException {"Cannot get info log of an invalid shader"};
+        throw ShaderError {"Cannot get info log of an invalid shader"};
     }
 
     GLint length;
