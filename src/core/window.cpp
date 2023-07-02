@@ -5,19 +5,45 @@
 #include <spdlog/spdlog.h>
 
 namespace {
-void GlfwErrorCallback(int error_code, const char *message) { spdlog::error("GLFW Error #{}: {}", error_code, message); }
+void GlfwErrorCallback(int error_code, const char *message) {
+    spdlog::error("GLFW Error #{}: {}", error_code, message);
+}
 }  // namespace
 
 namespace core {
 bool Window::glfw_initialized_ {false};
+std::size_t Window::windows_opened_ {0};
 
 Window::Window(const std::uint32_t width, const std::uint32_t height, const std::string &title)
-    : data_ {width, height, title} {
-    glfwSetErrorCallback(GlfwErrorCallback);
+    : data_ {width, height, title} {}
+
+Window::~Window() { Close(); }
+
+void Window::PollEvents() noexcept { glfwPollEvents(); }
+
+void Window::SwapBuffers() const {
+    if (handle_ == nullptr) {
+        throw WindowException {"Cannot swap buffers, the window is not open"};
+    }
+    glfwSwapBuffers(handle_);
+}
+
+bool Window::ShouldClose() const noexcept {
+    if (handle_ == nullptr) {
+        return true;
+    }
+    return glfwWindowShouldClose(handle_) != 0;
+}
+
+void Window::Open() {
+    if (handle_ != nullptr) {
+        throw WindowException {"Windows is already open"};
+    }
 
     if (!glfw_initialized_) {
+        glfwSetErrorCallback(GlfwErrorCallback);
         if (!glfwInit()) {
-            throw std::runtime_error {"Failed to initialize GLFW"};
+            throw WindowException {"Failed to initialize GLFW"};
         }
         spdlog::info("GLFW initialized");
         glfw_initialized_ = true;
@@ -29,13 +55,13 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    handle_ = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+    handle_ = glfwCreateWindow(data_.width, data_.height, data_.title.c_str(), nullptr, nullptr);
     if (handle_ == nullptr) {
         glfwTerminate();
-        throw std::runtime_error {"Failed to create window"};
+        throw WindowException {"Failed to create window"};
     }
 
-    spdlog::info("Created window");
+    spdlog::info("Window opened");
 
     glfwSetWindowUserPointer(handle_, &data_);
 
@@ -52,29 +78,33 @@ Window::Window(const std::uint32_t width, const std::uint32_t height, const std:
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         glfwDestroyWindow(handle_);
         glfwTerminate();
-        throw std::runtime_error {"Failed to initialize glad"};
+        throw WindowException {"Failed to load glad"};
     }
 
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, data_.width, data_.height);
 
     spdlog::debug("Vendor: {}", reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
     spdlog::debug("Renderer: {}", reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
     spdlog::debug("OpenGL version: {}", reinterpret_cast<const char *>(glGetString(GL_VERSION)));
     spdlog::debug("GLSL version: {}", reinterpret_cast<const char *>(glGetString(GL_SHADING_LANGUAGE_VERSION)));
+
+    ++windows_opened_;
 }
 
-Window::~Window() {
+void Window::Close() noexcept {
     if (handle_) {
         glfwDestroyWindow(handle_);
-    }
-    if (glfw_initialized_) {
-        glfwTerminate();
+        spdlog::info("Windows closed");
+        --windows_opened_;
+        
+        if (glfw_initialized_ && windows_opened_ == 0) {
+            glfwTerminate();
+            spdlog::info("GLFW terminated");
+        }
     }
 }
 
-void Window::PollEvents() noexcept { glfwPollEvents(); }
+const char *WindowException::what() const noexcept { return message_.c_str(); }
 
-void Window::SwapBuffers() const noexcept { glfwSwapBuffers(handle_); }
-
-bool Window::ShouldClose() const noexcept { return glfwWindowShouldClose(handle_) != 0; }
+WindowException::WindowException(std::string message) : message_(std::move(message)) {}
 }  // namespace core

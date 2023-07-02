@@ -1,9 +1,9 @@
 #pragma once
 
-#include <raymath.h>
+#include <glm/glm.hpp>
 
 namespace physics::components {
 struct Transform {
-    Vector2 position;
+    glm::vec2 position;
 };
 }  // namespace physics::components

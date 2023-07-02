@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <memory>
 #include <string>
 
 #include "core/player_system.h"
@@ -28,7 +27,7 @@ public:
 
 private:
     bool is_running_ {false};
-    std::unique_ptr<Window> window_;
+    Window window_;
     entt::registry registry_;
     resource::CacheManager cache_manager_;
     render::RenderSystem render_system_;

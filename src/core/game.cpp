@@ -3,14 +3,21 @@
 #include <spdlog/spdlog.h>
 
 namespace core {
-Game::Game(const std::uint32_t width, const std::uint32_t height, const std::string &title) {
-    SetupLogger();
-    window_ = std::make_unique<Window>(width, height, title);
-}
+Game::Game(const std::uint32_t width, const std::uint32_t height, const std::string &title)
+    : window_ {width, height, title} {}
 
 Game::~Game() { Shutdown(); }
 
 void Game::Run() noexcept {
+    SetupLogger();
+
+    try {
+        window_.Open();
+    } catch (const WindowException &ex) {
+        spdlog::critical(ex.what());
+        return;
+    }
+
     Start();
     Loop();
 }
@@ -22,13 +29,20 @@ void Game::Start() noexcept { is_running_ = true; }
 void Game::Loop() noexcept {
     while (is_running_) {
         Window::PollEvents();
-        window_->SwapBuffers();
+
+        try {
+            window_.SwapBuffers();
+        } catch (const WindowException &ex) {
+            spdlog::critical(ex.what());
+            is_running_ = false;
+            break;
+        }
 
         player_system_.Update(registry_);
 
         render_system_.Update(registry_);
 
-        if (window_->ShouldClose()) {
+        if (window_.ShouldClose()) {
             is_running_ = false;
         }
     }
