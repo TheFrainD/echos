@@ -3,12 +3,10 @@
 #include <cstdint>
 #include <stdexcept>
 
-#include "graphics/shader_error.h"
-
 namespace graphics {
-class ShaderCompilationError : public ShaderError {
+class ShaderCompilationError : public std::runtime_error {
 public:
-    explicit ShaderCompilationError(const std::string &arg) : ShaderError {arg} {}
+    explicit ShaderCompilationError(const std::string &info_log) : std::runtime_error(info_log) {}
 };
 
 class Shader {

@@ -11,9 +11,9 @@
 
 namespace graphics {
 
-class ShaderLinkingError : public ShaderError {
+class ShaderLinkingError : public std::runtime_error {
 public:
-    explicit ShaderLinkingError(const std::string &arg) : ShaderError(arg) {}
+    explicit ShaderLinkingError(const std::string &info_log) : std::runtime_error(info_log) {}
 };
 
 class ShaderProgram {

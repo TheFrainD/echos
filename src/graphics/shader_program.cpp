@@ -35,19 +35,9 @@ ShaderProgram &ShaderProgram::operator=(ShaderProgram &&other) noexcept {
     return *this;
 }
 
-void ShaderProgram::Attach(const Shader &shader) const {
-    if (id_ == 0) {
-        throw ShaderError {"Cannot attach shader to an invalid shader program"};
-    }
-
-    glAttachShader(id_, shader.GetId());
-}
+void ShaderProgram::Attach(const Shader &shader) const { glAttachShader(id_, shader.GetId()); }
 
 void ShaderProgram::Link() const {
-    if (id_ == 0) {
-        throw ShaderError {"Cannot link an invalid shader program"};
-    }
-
     glLinkProgram(id_);
 
     GLint link_status;
@@ -56,12 +46,7 @@ void ShaderProgram::Link() const {
         throw ShaderLinkingError {GetInfoLog()};
     }
 }
-void ShaderProgram::Use() const {
-    if (id_ == 0) {
-        throw ShaderError {"Cannot use an invalid shader program"};
-    }
-    glUseProgram(id_);
-}
+void ShaderProgram::Use() const { glUseProgram(id_); }
 
 ShaderProgram::UniformLocation ShaderProgram::GetUniformLocation(const std::string &name) {
     if (!uniform_locations_.contains(name)) {
@@ -118,10 +103,6 @@ void ShaderProgram::Release() noexcept {
     }
 }
 std::string ShaderProgram::GetInfoLog() const {
-    if (id_ == 0) {
-        throw ShaderError {"Cannot get info log of an invalid shader program"};
-    }
-
     GLint length;
     glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &length);
 
