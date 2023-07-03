@@ -19,6 +19,7 @@ ShaderProgram::ShaderProgram(const Shader &vertex, const Shader &fragment, const
     Attach(geometry);
     Link();
 }
+
 ShaderProgram::~ShaderProgram() { Release(); }
 
 ShaderProgram::ShaderProgram(ShaderProgram &&other) noexcept
@@ -102,6 +103,7 @@ void ShaderProgram::Release() noexcept {
         id_ = 0;
     }
 }
+
 std::string ShaderProgram::GetInfoLog() const {
     GLint length;
     glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &length);
