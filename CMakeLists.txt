@@ -14,6 +14,7 @@ conan_cmake_configure(
         glad/0.1.36
         glm/0.9.5.4
         spdlog/1.11.0
+        stb/cci.20220909
         OPTIONS
         glad:gl_profile=core
         glad:gl_version=4.6
@@ -31,6 +32,7 @@ find_package(glad REQUIRED)
 find_package(EnTT REQUIRED)
 find_package(glm REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(stb REQUIRED)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.h)
@@ -38,7 +40,7 @@ file(GLOB_RECURSE HEADERS include/*.h)
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE include)
 target_compile_definitions(${PROJECT_NAME} PUBLIC GLFW_INCLUDE_NONE)
-target_link_libraries(${PROJECT_NAME} glfw glad::glad EnTT::EnTT glm::glm spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} glfw glad::glad EnTT::EnTT glm::glm spdlog::spdlog stb::stb)
 
 if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework IOKit")
@@ -47,8 +49,8 @@ if (APPLE)
 endif ()
 
 add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "$<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/assets"
-    "$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/assets"
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "$<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/assets"
+        "$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/assets"
 )
