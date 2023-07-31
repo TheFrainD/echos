@@ -1,9 +1,19 @@
-cmake_minimum_required(VERSION 3.15)
-project(echos)
+cmake_minimum_required(VERSION 3.14)
+project(echos LANGUAGES CXX)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_BINARY_DIR})
+set(CMAKE_CXX_STANDARD 20)
 
-include(conan)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
+
+if (NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+    message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+    file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/0.18.1/conan.cmake"
+            "${CMAKE_BINARY_DIR}/conan.cmake"
+            TLS_VERIFY ON)
+endif ()
+
+include(${CMAKE_BINARY_DIR}/conan.cmake)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -34,23 +44,4 @@ find_package(glm REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(stb REQUIRED)
 
-file(GLOB_RECURSE SOURCES src/*.cpp)
-file(GLOB_RECURSE HEADERS include/*.h)
-
-add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE include)
-target_compile_definitions(${PROJECT_NAME} PUBLIC GLFW_INCLUDE_NONE)
-target_link_libraries(${PROJECT_NAME} glfw glad::glad EnTT::EnTT glm::glm spdlog::spdlog stb::stb)
-
-if (APPLE)
-    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
-    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
-    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
-endif ()
-
-add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "$<TARGET_PROPERTY:${PROJECT_NAME},SOURCE_DIR>/assets"
-        "$<TARGET_PROPERTY:${PROJECT_NAME},BINARY_DIR>/assets"
-)
+add_subdirectory(src)
